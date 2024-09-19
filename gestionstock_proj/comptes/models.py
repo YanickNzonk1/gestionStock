@@ -1,3 +1,5 @@
+
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -8,30 +10,42 @@ from django.db import models
 #  utilisateur, vendeur, entreprise, contrat, local
 
 
+    
 
-
-class Utilisateur(models.Model):
-    userName = models.CharField(max_length=100)
-    passWord = models.CharField(max_length=100)
-    isAdmin = models.BooleanField(default=False)
-    createdBy = models.IntegerField(null=True, blank=True)
-    inscriptionDate = models.DateField()
-    actif = models.BooleanField(default=True)
+class Personne(models.Model):
+    nom = models.CharField(max_length=100)
+    prenom = models.CharField(max_length=100)
+    SEX_CHOICES = (
+        ('feminin', 'F'),
+        ('masculin', 'M'),
+    )
+    sex = models.CharField(max_length=10, choices=SEX_CHOICES, default='F')
+    telephone = models.CharField(max_length=15)
 
     class Meta:
-        db_table = "utilisateur"
-
-    def __str__(self):
-        return self.userName
+        db_table = "personne"
+        
 
 
 
-class Entreprise(models.Model):
-    nomEntreprise = models.CharField(max_length=100)
-    adresse = models.CharField(max_length=200)
+class Localisation(models.Model):
+    adresse = models.CharField(max_length=200, null=True, blank=True)
     ville = models.CharField(max_length=100)
     pays = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=20)
+    province = models.CharField(max_length=100, null=True, blank=True)
+    codePostal = models.CharField(max_length=10, null=True, blank=True)
+    telephone = models.CharField(max_length=20, null=True, blank=True)
+    class Meta:
+        abstract = True
+
+    class Meta:
+        db_table = "localisation"
+
+
+
+
+class Entreprise(Localisation):
+    nomEntreprise = models.CharField(max_length=100)
 
     class Meta:
         db_table = "entreprise"
@@ -40,59 +54,88 @@ class Entreprise(models.Model):
         return self.nomEntreprise
 
 
-class Representant(Utilisateur):
-    entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE, null=True, blank=True)
-    nom = models.CharField(max_length=100)
-    prenom = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=15)
 
+
+class Utilisateur(AbstractUser):   
+    telephone = models.CharField(max_length=20, null=True, blank=True)
+    # isAdmin = models.BooleanField(default=False)
+    # createdBy = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    # inscriptionDate = models.DateField(auto_now_add=True)
+    # actif = models.BooleanField(default=True)
+    
     class Meta:
-        db_table = "representant"
-
-    def __str__(self):
-        return self.prenom + " " + self.nom
-
-class Vendeur(Utilisateur):
-    nom = models.CharField(max_length=100)
-    prenom = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=20)
-
-    class Meta:
-        db_table = "vendeur"
-
-    def __str__(self):
-        return self.prenom + self.nom
-
-class Contrat(models.Model):
-    contenu =  models.CharField(max_length=2000)
-    vendeur = models.ForeignKey(Vendeur, on_delete=models.PROTECT)
-    representant = models.ForeignKey(Representant, on_delete=models.PROTECT)
-    dateSignature = models.DateField()
-    echeance = models.DateField()
-
-    class Meta:
-        db_table = "contrat"
-
-    def __str__(self):
-        return 'Contrat numero' + str(self.pk)
+        db_table = "utilisateur"
 
 
-class Local(models.Model):
-    description =  models.CharField(max_length=500)
-    statut = models.CharField(max_length=50)
-    contrat = models.ForeignKey(Contrat, on_delete=models.PROTECT)
-    actif = models.BooleanField(default=True)
+# class Representant(AbstractUser, Personne):
+#     #reportTo = models.ForeignKey('sellf', null=True, blank=True, on_delete=models.SET_NULL)
+#     entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE, null=True, blank=True)
 
-    class Meta:
-        db_table = "local"
+#     class Meta:
+#         db_table = "representant"
 
-    def __str__(self):
-        return "Local nuero" + self.pk
+#     def __str__(self):
+#         return self.prenom + " " + self.nom
 
 
 
 
+# class Vendeur(Utilisateur, Personne):
+#     #reportTo = models.ForeignKey('sellf', null=True, blank=True, on_delete=models.SET_NULL)
+#     class Meta:
+#         db_table = "vendeur"
 
+#     def __str__(self):
+#         return self.prenom + " " + self.nom
+
+# class Contrat(models.Model):
+#     contenu =  models.CharField(max_length=2000)
+#     vendeur = models.ForeignKey(Vendeur, on_delete=models.PROTECT)
+#     representant = models.ForeignKey(Representant, on_delete=models.PROTECT)
+#     dateSignature = models.DateField(auto_now_add=True)
+#     # dateEcheance = champ calculé
+#     class Meta:
+#         db_table = "contrat"
+
+#     def __str__(self):
+#         return 'Contrat numero ' + str(self.pk)
+
+
+# class Local(models.Model):
+#     description =  models.CharField(max_length=500)
+#     statut = models.CharField(max_length=50)
+#     contrat = models.ForeignKey(Contrat, on_delete=models.PROTECT)
+#     actif = models.BooleanField(default=True)
+
+#     class Meta:
+#         db_table = "local"
+
+#     def __str__(self):
+#         return "Local nuero " + str(self.pk)
+
+
+
+
+
+
+
+
+
+
+
+#   PAS NECESSAIRE DE PERSONNALISER NOTRE MODEL UTILISATEUR; CELUI DE DJANGO NOUS CONVIENT
+# class Utilisateur(AbstractUser):   
+#     userName = models.CharField(max_length=100)
+#     # isAdmin = models.BooleanField(default=False)
+#     # createdBy = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+#     # inscriptionDate = models.DateField(auto_now_add=True)
+#     # actif = models.BooleanField(default=True)
+    
+#     class Meta:
+#         db_table = "utilisateur"
+
+#     def __str__(self):
+#        return self.
 
 
 

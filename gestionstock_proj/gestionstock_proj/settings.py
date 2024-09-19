@@ -87,6 +87,12 @@ DATABASES = {
 }
 
 
+# Ajouter la personnalisation de User
+
+AUTH_USER_MODEL = 'users.Utilisateur'
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
