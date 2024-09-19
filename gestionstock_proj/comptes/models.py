@@ -3,14 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-
-
-
 # Create your models here.
 #  utilisateur, vendeur, entreprise, contrat, local
 
-
-    
 
 class Personne(models.Model):
     nom = models.CharField(max_length=100)
@@ -24,9 +19,8 @@ class Personne(models.Model):
 
     class Meta:
         db_table = "personne"
+        abstract = True
         
-
-
 
 class Localisation(models.Model):
     adresse = models.CharField(max_length=200, null=True, blank=True)
@@ -40,6 +34,7 @@ class Localisation(models.Model):
 
     class Meta:
         db_table = "localisation"
+        abstract =True
 
 
 
@@ -67,51 +62,52 @@ class Utilisateur(AbstractUser):
         db_table = "utilisateur"
 
 
-# class Representant(AbstractUser, Personne):
-#     #reportTo = models.ForeignKey('sellf', null=True, blank=True, on_delete=models.SET_NULL)
-#     entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE, null=True, blank=True)
+class Representant(Personne):
+    reportTo = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE, null=True, blank=True)
+    Utilisateur = models.OneToOneField(Utilisateur, on_delete=models.PROTECT, null=True, blank=True)
+    class Meta:
+        db_table = "representant"
 
-#     class Meta:
-#         db_table = "representant"
-
-#     def __str__(self):
-#         return self.prenom + " " + self.nom
-
-
+    def __str__(self):
+        return self.prenom + " " + self.nom
 
 
-# class Vendeur(Utilisateur, Personne):
-#     #reportTo = models.ForeignKey('sellf', null=True, blank=True, on_delete=models.SET_NULL)
-#     class Meta:
-#         db_table = "vendeur"
-
-#     def __str__(self):
-#         return self.prenom + " " + self.nom
-
-# class Contrat(models.Model):
-#     contenu =  models.CharField(max_length=2000)
-#     vendeur = models.ForeignKey(Vendeur, on_delete=models.PROTECT)
-#     representant = models.ForeignKey(Representant, on_delete=models.PROTECT)
-#     dateSignature = models.DateField(auto_now_add=True)
-#     # dateEcheance = champ calculé
-#     class Meta:
-#         db_table = "contrat"
-
-#     def __str__(self):
-#         return 'Contrat numero ' + str(self.pk)
 
 
-# class Local(models.Model):
-#     description =  models.CharField(max_length=500)
-#     statut = models.CharField(max_length=50)
-#     contrat = models.ForeignKey(Contrat, on_delete=models.PROTECT)
-#     actif = models.BooleanField(default=True)
+class Vendeur(Personne):
+    reportTo = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    Utilisateur = models.OneToOneField(Utilisateur, on_delete=models.PROTECT, null=True, blank=True)
+    class Meta:
+        db_table = "vendeur"
 
-#     class Meta:
-#         db_table = "local"
+    def __str__(self):
+        return self.prenom + " " + self.nom
 
-#     def __str__(self):
-#         return "Local nuero " + str(self.pk)
+class Contrat(models.Model):
+    contenu =  models.CharField(max_length=2000)
+    vendeur = models.ForeignKey(Vendeur, on_delete=models.PROTECT)
+    representant = models.ForeignKey(Representant, on_delete=models.PROTECT)
+    dateSignature = models.DateField(auto_now_add=True)
+    # dateEcheance = champ calculé
+    class Meta:
+        db_table = "contrat"
+
+    def __str__(self):
+        return 'Contrat numero ' + str(self.pk)
+
+
+class Local(models.Model):
+    description =  models.CharField(max_length=500)
+    statut = models.CharField(max_length=50)
+    contrat = models.ForeignKey(Contrat, on_delete=models.PROTECT)
+    actif = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "local"
+
+    def __str__(self):
+        return "Local nuero " + str(self.pk)
 
 
 

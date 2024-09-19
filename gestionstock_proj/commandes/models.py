@@ -1,126 +1,125 @@
 from django.db import models
-#from comptes.models import Entreprise
-#from produits.models import Article
+from comptes.models import Entreprise
+#from commandes.models import Article
 
 # Create your models here.
 #  Facture, Client, Commande, Detail
 
 
 
+class Client(Entreprise):
+    STATUT_CHOICES = (
+        ('Regulier', 'REG'),
+        ('Occasionnel', 'OCC'),
+    )
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='F')
+    telephone_client = models.CharField(max_length=15)
+    actif = models.BooleanField(default=True)
 
-# class Client(Entreprise):
-#     STATUT_CHOICES = (
-#         ('Regulier', 'REG'),
-#         ('Occasionnel', 'OCC'),
-#     )
-#     statut = models.CharField(max_length=3, choices=STATUT_CHOICES, default='F')
-#     telephone = models.CharField(max_length=15)
-#     actif = models.BooleanField(default=True)
+    class Meta:
+        db_table = "client"
 
-#     class Meta:
-#         db_table = "client"
-
-#     def __str__(self):
-#         return self.nomEntreprise
+    def __str__(self):
+        return self.nomEntreprise
     
 
-# class Commande(models.Model):
-#     client = models.ForeignKey(Client, on_delete=models.PROTECT)
-#     dateCom = models.DateField(auto_now_add=True)
-#     STATUT_CHOICES = (
-#         ('Initiée', 'INI'),
-#         ('En traitement', 'ENT'),
-#         ('Traitée', 'TTE'),
-#         ('Payée', 'PYE'),
-#     )
-#     statut = models.CharField(max_length=3, choices=STATUT_CHOICES, default='F')
-#     # dateEcheance = models.DateField()    Champ calcule
+class Commande(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    dateCom = models.DateField(auto_now_add=True)
+    STATUT_CHOICES = (
+        ('Initiée', 'INI'),
+        ('En traitement', 'ENT'),
+        ('Traitée', 'TTE'),
+        ('Payée', 'PYE'),
+    )
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='F')
+    # dateEcheance = models.DateField()    Champ calcule
 
-#     class Meta:
-#         db_table = "commande"
+    class Meta:
+        db_table = "commande"
 
-#     def __str__(self):
-#         return "commande " + str(self.pk) + " " + self.client.nomEntreprise + " " + self.dateCom
+    def __str__(self):
+        return "commande " + str(self.pk) + " " + self.client.nomEntreprise + " " + self.dateCom
     
     
 
 
-#     # ====================================================================
-#     # =============  FROM PRODUITS TO PREVENT CIRCULAR IMPORT ============
-#     # ====================================================================
+    # ====================================================================
+    # =============  FROM PRODUITS TO PREVENT CIRCULAR IMPORT ============
+    # ====================================================================
 
-#     from comptes.models import Entreprise
-# #from commandes.models import Commande, DetailCommande
+#from comptes.models import Entreprise
+#from commandes.models import Commande, DetailCommande
 
-# # Create your models here.
-# # Categorie, Article, Stock, Fournisseur
-# # importer : Commande_, Stock, Fournisseur, Category
+# Create your models here.
+# Categorie, Article, Stock, Fournisseur
+# importer : Commande_, Stock, Fournisseur, Category
 
 
  
 
 
-# class Fournisseur(Entreprise):
-#     actif = models.BooleanField(default=True)
-#     isExternal = models.BooleanField(default=True)
-#     class Meta:
-#         db_table = "fournisseur"
+class Fournisseur(Entreprise):
+    actif = models.BooleanField(default=True)
+    isExternal = models.BooleanField(default=True)
+    class Meta:
+        db_table = "fournisseur"
 
-#     def __str__(self):
-#         return self.nomEntreprise
+    def __str__(self):
+        return self.nomEntreprise
     
 
 
-# class Category(models.Model):
-#     categoryName = models.CharField(max_length=100)
-#     description = models.CharField(max_length=1000)
+class Category(models.Model):
+    categoryName = models.CharField(max_length=100)
+    description = models.CharField(max_length=1000)
 
-#     class Meta:
-#         db_table = "category"
+    class Meta:
+        db_table = "category"
 
-#     def __str__(self):
-#         return self.categoryName
-
-
-# class Stock(models.Model):
-#     dateEntree = models.DateField(auto_now_add=True)
-#     qteInitiale = models.FloatField(default=100)
-#     qteActuelle = models.FloatField(default=1)
-#     dateExpiration = models.DateField(null=True, blank=True)
-
-#     class Meta:
-#         db_table = "stock"
-
-#     def __str__(self):
-#         return "stock numero" + str(self.pk)
+    def __str__(self):
+        return self.categoryName
 
 
-# class Article(models.Model):
-#     articleName = models.CharField(max_length=100)
-#     prixUnitaire = models.FloatField()
-#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-#     fournisseur = models.ForeignKey(Fournisseur, on_delete=models.PROTECT, null=True, blank=True)
-#     stock = models.ForeignKey(Stock, on_delete=models.PROTECT)
+class Stock(models.Model):
+    dateEntree = models.DateField(auto_now_add=True)
+    qteInitiale = models.FloatField(default=100)
+    qteActuelle = models.FloatField(default=1)
+    dateExpiration = models.DateField(null=True, blank=True)
 
-#     class Meta:
-#         db_table = "article"
+    class Meta:
+        db_table = "stock"
 
-#     def __str__(self):
-#         return self.articleName
+    def __str__(self):
+        return "stock numero" + str(self.pk)
+
+
+class Article(models.Model):
+    articleName = models.CharField(max_length=100)
+    prixUnitaire = models.FloatField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    fournisseur = models.ForeignKey(Fournisseur, on_delete=models.PROTECT, null=True, blank=True)
+    stock = models.ForeignKey(Stock, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "article"
+
+    def __str__(self):
+        return self.articleName
     
 
 
     
-# class DetailCommande(models.Model):
-#     article = models.ForeignKey(Article, on_delete=models.PROTECT) 
-#     qte = models.FloatField(default=1)
-#     commande = models.ForeignKey(Commande, models.PROTECT)
+class DetailCommande(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.PROTECT) 
+    qte = models.FloatField(default=1)
+    commande = models.ForeignKey(Commande, models.PROTECT)
 
-#     class Meta:
-#         db_table = "detail"
+    class Meta:
+        db_table = "detail"
 
-#     def __str__(self):
-#         return self.article.articleName + " " + str(self.qte)
+    def __str__(self):
+        return self.article.articleName + " " + str(self.qte)
 
 
 

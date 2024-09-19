@@ -89,7 +89,7 @@ DATABASES = {
 
 # Ajouter la personnalisation de User
 
-AUTH_USER_MODEL = 'users.Utilisateur'
+AUTH_USER_MODEL = 'comptes.Utilisateur'
 
 
 
