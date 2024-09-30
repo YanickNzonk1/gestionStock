@@ -1,0 +1,29 @@
+.parent { 
+
+    height: 100vh;
+
+}
+
+
+
+
+
+
+
+
+/*
+
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Accueil {% endblock %}
+
+{% block content %}
+
+
+{% endblock %}
+
+
+*/

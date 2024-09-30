@@ -29,8 +29,6 @@ class Localisation(models.Model):
     province = models.CharField(max_length=100, null=True, blank=True)
     codePostal = models.CharField(max_length=10, null=True, blank=True)
     telephone = models.CharField(max_length=20, null=True, blank=True)
-    class Meta:
-        abstract = True
 
     class Meta:
         db_table = "localisation"
@@ -60,6 +58,9 @@ class Utilisateur(AbstractUser):
     
     class Meta:
         db_table = "utilisateur"
+
+    def voir(self):
+        return self.username
 
 
 class Representant(Personne):

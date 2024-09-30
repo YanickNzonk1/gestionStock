@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Accueil {% endblock %}
+
+{% block tete %} 
+    <header class="masthead text-center text-white">
+        <div class="masthead-content">
+            <div class="container px-5">
+                <h3 class="masthead-subheading mb-0">Bienvenu dans GestionStock</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="p-5">
+                            <img class="img-fluid rounded-circle" src="{% static 'assets/img/icone.jpg' %}"alt="..." />
+                            <h4 class="  mb-0">
+                                Nouvelle étape de l'automatisme
+                            </h4>
+                            <a class="btn btn-primary btn-xl rounded-pill mt-5" href="#scroll">En savoir plus</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-5">
+                            <img class="img-fluid rounded-circle" src="{% static 'assets/img/common_img.png' %}"
+                                alt="..." />
+                            <h3 class="  mb-0">
+                                Simplifiez vos mouvements de marchandises ici
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <!-- <h5 class="masthead-subheading mb-0">Simplifiez vos mouvements de marchandises ici</h5> -->
+            </div>
+        </div>
+        <div class="bg-circle-1 bg-circle">
+        </div>
+        <div class="bg-circle-2 bg-circle"></div>
+        <div class="bg-circle-3 bg-circle"></div>
+        <div class="bg-circle-4 bg-circle"></div>
+    </header>
+{% endblock %}
+
+{% block content %}
+
+
+
+{% endblock %}
