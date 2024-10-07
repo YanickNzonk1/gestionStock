@@ -35,7 +35,7 @@ def connexion(request):
     # return render(request, 'connexion.html')
 
 #@login_required
-def acceuil(request):
+def accueil(request):
     #pass
     return render(request, 'accueil.html')
 

@@ -1,6 +1,14 @@
-.parent { 
+.container-custom { 
 
-    height: 100vh;
+    height: 800px;
+    width: 100%;
+    background-image : url("../images/experts3.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3; /* Ajustez la transparence ici */
+    z-index: -1; /* Place l'image derrière le contenu */
+    /* background-color: chartreuse; */
 
 }
 

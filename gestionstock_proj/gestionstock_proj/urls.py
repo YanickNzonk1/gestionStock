@@ -17,12 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 #from produits.views import home
-from comptes.views import acceuil, experts
+from comptes.views import accueil, experts
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', inscription, name='inscription'),
     # path('connexion/', connexion, name='connexion' )
-    path('', acceuil, name='acceuil'),
+    path('', accueil, name='accueil'),
     path('experts', experts, name='experts' ),
 ]

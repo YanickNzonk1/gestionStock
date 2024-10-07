@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    {% load static%}
+    {% load static %}
 
 
     <!--   BLOCK TITLE    -->
@@ -24,7 +24,7 @@
         rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
 </head>
 
 <body id="page-top">
@@ -42,10 +42,12 @@
                     class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{%  url 'accueil' %}">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!"></a></li>
                     <li class="nav-item"><a class="nav-link" href="#!">Connexion</a></li>
                     <li class="nav-item"><a class="nav-link" href="#!">S'inscrire</a></li>
                     <li class="nav-item"><a class="nav-link" href="#!">Contacts</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Nos Experts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{%  url 'experts' %}">Nos Experts</a></li>
                 </ul>
             </div>
         </div>
